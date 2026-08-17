@@ -14,7 +14,10 @@ export function App() {
   const [userProfile, setUserProfile] = useState<UserProfile>(() => {
     const saved = localStorage.getItem('mathquest_user_profile');
     if (saved) {
-      try { return JSON.parse(saved); } catch (e) {}
+      try {
+        const parsed = JSON.parse(saved);
+        return { ...parsed, cycle: '3eme' };
+      } catch (e) {}
     }
     return {
       name: 'Chevalier',
