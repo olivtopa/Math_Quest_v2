@@ -69,73 +69,73 @@ export const AventureView: React.FC<AventureViewProps> = ({
   ];
 
   return (
-    <div className="max-w-6xl mx-auto px-4 py-6 space-y-8">
+    <div className="max-w-6xl mx-auto px-3 py-4 sm:px-4 sm:py-6 space-y-6 sm:space-y-8 overflow-hidden">
       {/* Avatar Card Header */}
       <AvatarCard userProfile={userProfile} onOpenGrimoire={onOpenGrimoire} />
 
       {/* Hero Banner */}
-      <div className="mq-glass p-8 relative overflow-hidden bg-gradient-to-r from-slate-950 via-slate-900 to-slate-950 border border-slate-700/60">
+      <div className="mq-glass p-4 sm:p-8 relative overflow-hidden bg-gradient-to-r from-slate-950 via-slate-900 to-slate-950 border border-slate-700/60 max-w-full">
         <div className="absolute top-0 right-0 w-80 h-80 bg-emerald-500/10 rounded-full blur-3xl pointer-events-none animate-pulse" />
-        <div className="relative z-10 space-y-3 max-w-2xl">
-          <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-emerald-500/15 border border-emerald-500/30 text-emerald-300 text-xs font-bold">
-            <Sparkles className="w-3.5 h-3.5 text-emerald-400" />
+        <div className="relative z-10 space-y-2.5 max-w-2xl">
+          <div className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-emerald-500/15 border border-emerald-500/30 text-emerald-300 text-[10px] sm:text-xs font-bold leading-tight">
+            <Sparkles className="w-3.5 h-3.5 text-emerald-400 shrink-0" />
             <span>Royaumes du Savoir — Préparation Brevet & Lycée</span>
           </div>
-          <h2 className="text-3xl md:text-4xl font-extrabold text-white tracking-tight">
+          <h2 className="text-xl sm:text-3xl md:text-4xl font-extrabold text-white tracking-tight leading-tight">
             Conquiers les 4 Piliers indispensables !
           </h2>
-          <p className="text-slate-300 text-sm leading-relaxed">
+          <p className="text-slate-300 text-xs sm:text-sm leading-relaxed">
             Progresse étape par étape à travers les donjons socratiques pour forger tes réflexes et briller en Seconde et au Bac.
           </p>
         </div>
       </div>
 
       {/* Realms Grid */}
-      <div className="space-y-8">
+      <div className="space-y-6 sm:space-y-8">
         {realms.map((realm) => {
           const isUnlocked = gameState.level >= realm.minLevel;
           return (
-            <div key={realm.id} className="space-y-4">
-              <div className="flex items-center gap-3">
-                <span className={`w-3 h-3 rounded-full ${realm.badgeColor}`} />
-                <h3 className={`text-xl font-extrabold tracking-tight ${realm.color}`}>
+            <div key={realm.id} className="space-y-3 sm:space-y-4">
+              <div className="flex items-center gap-2.5">
+                <span className={`w-2.5 h-2.5 sm:w-3 sm:h-3 rounded-full ${realm.badgeColor}`} />
+                <h3 className={`text-lg sm:text-xl font-extrabold tracking-tight ${realm.color}`}>
                   {realm.title}
                 </h3>
               </div>
 
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-3 sm:gap-4">
                 {isUnlocked ? (
                   realm.quests.map((quest, qIdx) => (
                     <button
                       key={qIdx}
                       onClick={() => onStartDungeon(realm.id, qIdx)}
-                      className="mq-glass mq-glass-interactive p-5 rounded-2xl border border-slate-800 flex justify-between items-center text-left group"
+                      className="mq-glass mq-glass-interactive p-4 sm:p-5 rounded-2xl border border-slate-800 flex justify-between items-center text-left group gap-3"
                     >
-                      <div className="flex items-center gap-4">
-                        <span className="text-3xl">{quest.icon}</span>
+                      <div className="flex items-center gap-3 sm:gap-4">
+                        <span className="text-2xl sm:text-3xl shrink-0">{quest.icon}</span>
                         <div>
-                          <h4 className="font-extrabold text-base text-white group-hover:text-amber-400 transition-colors">
+                          <h4 className="font-extrabold text-sm sm:text-base text-white group-hover:text-amber-400 transition-colors leading-tight">
                             {quest.title}
                           </h4>
-                          <p className="text-xs text-slate-400 mt-0.5">{quest.sub}</p>
+                          <p className="text-[11px] sm:text-xs text-slate-400 mt-0.5 leading-snug">{quest.sub}</p>
                         </div>
                       </div>
-                      <div className="flex items-center gap-1 text-xs font-extrabold text-amber-400 shrink-0">
+                      <div className="flex items-center gap-1 text-[11px] sm:text-xs font-extrabold text-amber-400 shrink-0">
                         <span>Combattre</span>
-                        <ChevronRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
+                        <ChevronRight className="w-3.5 h-3.5 sm:w-4 sm:h-4 group-hover:translate-x-1 transition-transform" />
                       </div>
                     </button>
                   ))
                 ) : (
-                  <div className="col-span-full mq-glass p-6 rounded-2xl border border-dashed border-slate-800/80 flex items-center justify-between text-slate-500 opacity-60">
-                    <div className="flex items-center gap-4">
-                      <Lock className="w-8 h-8 text-slate-600" />
+                  <div className="col-span-full mq-glass p-4 sm:p-6 rounded-2xl border border-dashed border-slate-800/80 flex items-center justify-between text-slate-500 opacity-60 gap-3">
+                    <div className="flex items-center gap-3 sm:gap-4">
+                      <Lock className="w-6 h-6 sm:w-8 sm:h-8 text-slate-600 shrink-0" />
                       <div>
-                        <h4 className="font-bold text-base text-slate-400">{realm.title} (Verrouillé)</h4>
-                        <p className="text-xs text-slate-500">Requis : Niveau {realm.minLevel} (Terminer le royaume précédent)</p>
+                        <h4 className="font-bold text-sm sm:text-base text-slate-400">{realm.title} (Verrouillé)</h4>
+                        <p className="text-[11px] sm:text-xs text-slate-500">Requis : Niveau {realm.minLevel} (Terminer le royaume précédent)</p>
                       </div>
                     </div>
-                    <span className="text-xs font-bold px-3 py-1 bg-slate-900 rounded-lg border border-slate-800">Verrouillé</span>
+                    <span className="text-[10px] sm:text-xs font-bold px-2.5 py-1 bg-slate-900 rounded-lg border border-slate-800 shrink-0">Verrouillé</span>
                   </div>
                 )}
               </div>

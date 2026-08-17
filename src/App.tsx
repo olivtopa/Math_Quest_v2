@@ -51,7 +51,6 @@ export function App() {
 
   const [activeTab, setActiveTab] = useState<MainTab>('aventure');
   const [currentView, setCurrentView] = useState<'tab' | 'combat' | 'grimoire'>('tab');
-  const [apiMode, setApiMode] = useState(false);
 
   // Active Combat State
   const [activeDungeon, setActiveDungeon] = useState<{ realm: string; questIndex: number } | null>(null);
@@ -143,8 +142,7 @@ export function App() {
       <Header
         userProfile={userProfile}
         onCycleChange={handleCycleChange}
-        apiMode={apiMode}
-        onToggleApiMode={() => setApiMode(!apiMode)}
+        purchasedCycles={['3eme']}
       />
 
       {/* Main Container */}

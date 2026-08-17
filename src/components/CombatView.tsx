@@ -44,24 +44,24 @@ export const CombatView: React.FC<CombatViewProps> = ({
   };
 
   return (
-    <div className="max-w-4xl mx-auto px-4 py-6 space-y-6">
+    <div className="max-w-4xl mx-auto px-3 py-4 sm:px-4 sm:py-6 space-y-4 sm:space-y-6 overflow-hidden">
       {/* Top Header Wave Title */}
-      <div className="flex items-center justify-between">
-        <button onClick={onBackToMap} className="mq-btn-secondary text-xs">
-          <ArrowLeft className="w-4 h-4" /> Carte des Royaumes
+      <div className="flex flex-col sm:flex-row items-stretch sm:items-center justify-between gap-2.5 w-full">
+        <button onClick={onBackToMap} className="mq-btn-secondary text-[11px] sm:text-xs py-1.5 px-3 self-start sm:self-auto">
+          <ArrowLeft className="w-3.5 h-3.5" /> Carte des Royaumes
         </button>
-        <div className="flex items-center gap-3">
-          <span className="text-xs font-black text-emerald-400 tracking-wider uppercase bg-emerald-500/10 px-3 py-1 rounded-full border border-emerald-500/30">
+        <div className="flex items-center justify-between sm:justify-end gap-2 w-full sm:w-auto">
+          <span className="text-[10px] sm:text-xs font-black text-emerald-400 tracking-tight uppercase bg-emerald-500/10 px-2.5 py-1 rounded-full border border-emerald-500/30 truncate max-w-[200px] sm:max-w-none text-center">
             {waveText} — {monsterName}
           </span>
-          <span className="text-xs font-bold text-rose-400 flex items-center gap-1 bg-rose-500/10 px-3 py-1 rounded-full border border-rose-500/30">
-            <Heart className="w-3.5 h-3.5 fill-rose-500 text-rose-500" /> Monstre Actif
+          <span className="text-[10px] sm:text-xs font-bold text-rose-400 flex items-center gap-1 bg-rose-500/10 px-2.5 py-1 rounded-full border border-rose-500/30 shrink-0">
+            <Heart className="w-3 h-3 fill-rose-500 text-rose-500" /> Monstre Actif
           </span>
         </div>
       </div>
 
       {/* Main Question & Graphic Panel Container */}
-      <div className="mq-glass p-8 space-y-6 border-l-4 border-l-amber-500">
+      <div className="mq-glass p-4 sm:p-8 space-y-4 sm:space-y-6 border-l-4 border-l-amber-500 max-w-full overflow-hidden">
         <div className="space-y-2 border-b border-slate-800 pb-4">
           <span className="text-xs font-bold text-amber-400 uppercase tracking-wider">{question.title}</span>
           <h2 className="text-2xl font-extrabold text-white">
