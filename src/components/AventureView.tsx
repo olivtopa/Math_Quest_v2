@@ -1,7 +1,7 @@
 import React from 'react';
 import { GameState, UserProfile } from '../types/mathquest';
 import { AvatarCard } from './AvatarCard';
-import { Lock, Sparkles, ChevronRight } from 'lucide-react';
+import { Lock, Sparkles, ChevronRight, CheckCircle2 } from 'lucide-react';
 
 interface AventureViewProps {
   gameState: GameState;
@@ -105,27 +105,58 @@ export const AventureView: React.FC<AventureViewProps> = ({
 
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                 {isUnlocked ? (
-                  realm.quests.map((quest, qIdx) => (
-                    <button
-                      key={qIdx}
-                      onClick={() => onStartDungeon(realm.id, qIdx)}
-                      className="mq-glass mq-glass-interactive p-4 sm:p-6 rounded-2xl border border-slate-800 flex justify-between items-center text-left group gap-4"
-                    >
-                      <div className="flex items-center gap-4">
-                        <span className="text-3xl sm:text-4xl shrink-0">{quest.icon}</span>
-                        <div>
-                          <h4 className="font-extrabold text-base sm:text-lg text-white group-hover:text-amber-400 transition-colors leading-tight">
-                            {quest.title}
-                          </h4>
-                          <p className="text-xs sm:text-sm text-slate-300 mt-1 leading-snug">{quest.sub}</p>
+                  realm.quests.map((quest, qIdx) => {
+                    const questKey = `${realm.id}_${qIdx}`;
+                    const isCompleted = gameState.completedQuests?.includes(questKey);
+
+                    return (
+                      <button
+                        key={qIdx}
+                        onClick={() => onStartDungeon(realm.id, qIdx)}
+                        className={`mq-glass mq-glass-interactive p-4 sm:p-6 rounded-2xl flex justify-between items-center text-left group gap-4 transition-all ${
+                          isCompleted
+                            ? 'border border-emerald-500/40 bg-emerald-950/20 shadow-lg shadow-emerald-500/5'
+                            : 'border border-slate-800'
+                        }`}
+                      >
+                        <div className="flex items-center gap-4">
+                          <div className="relative shrink-0">
+                            <span className="text-3xl sm:text-4xl">{quest.icon}</span>
+                            {isCompleted && (
+                              <span className="absolute -bottom-1 -right-1 bg-emerald-500 text-slate-950 p-0.5 rounded-full shadow-md">
+                                <CheckCircle2 className="w-4 h-4 stroke-[3]" />
+                              </span>
+                            )}
+                          </div>
+                          <div>
+                            <div className="flex items-center gap-2 flex-wrap">
+                              <h4 className="font-extrabold text-base sm:text-lg text-white group-hover:text-amber-400 transition-colors leading-tight">
+                                {quest.title}
+                              </h4>
+                              {isCompleted && (
+                                <span className="inline-flex items-center gap-1 text-[11px] font-bold px-2 py-0.5 rounded-full bg-emerald-500/20 text-emerald-300 border border-emerald-500/40">
+                                  <CheckCircle2 className="w-3 h-3 text-emerald-400" /> Épreuve Réussie
+                                </span>
+                              )}
+                            </div>
+                            <p className="text-xs sm:text-sm text-slate-300 mt-1 leading-snug">{quest.sub}</p>
+                          </div>
                         </div>
-                      </div>
-                      <div className="flex items-center gap-1.5 text-xs sm:text-sm font-extrabold text-amber-400 shrink-0">
-                        <span>Combattre</span>
-                        <ChevronRight className="w-4 h-4 sm:w-5 sm:h-5 group-hover:translate-x-1 transition-transform" />
-                      </div>
-                    </button>
-                  ))
+
+                        <div className="flex items-center gap-1.5 text-xs sm:text-sm font-extrabold shrink-0">
+                          {isCompleted ? (
+                            <span className="text-emerald-400 flex items-center gap-1">
+                              Rejouer <ChevronRight className="w-4 h-4 sm:w-5 sm:h-5 group-hover:translate-x-1 transition-transform" />
+                            </span>
+                          ) : (
+                            <span className="text-amber-400 flex items-center gap-1">
+                              Combattre <ChevronRight className="w-4 h-4 sm:w-5 sm:h-5 group-hover:translate-x-1 transition-transform" />
+                            </span>
+                          )}
+                        </div>
+                      </button>
+                    );
+                  })
                 ) : (
                   <div className="col-span-full mq-glass p-5 sm:p-6 rounded-2xl border border-dashed border-slate-800/80 flex items-center justify-between text-slate-500 opacity-60 gap-4">
                     <div className="flex items-center gap-4">

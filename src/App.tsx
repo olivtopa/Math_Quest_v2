@@ -128,11 +128,13 @@ export function App() {
     if (!activeDungeon) return;
     if (waveIndex >= 4) {
       // Dungeon Cleared Victory
+      const questKey = `${activeDungeon.realm}_${activeDungeon.questIndex}`;
       setGameState(prev => ({
         ...prev,
         dungeonsCleared: prev.dungeonsCleared + 1,
         gold: prev.gold + 50,
-        xp: prev.xp + 150
+        xp: prev.xp + 150,
+        completedQuests: Array.from(new Set([...(prev.completedQuests || []), questKey]))
       }));
       setCurrentView('tab');
       setActiveTab('aventure');
