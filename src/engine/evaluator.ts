@@ -64,9 +64,6 @@ export function evaluateStepAnswer(step: ExerciseStep, userAnswer: string): {
   isCorrect: boolean;
   matchedFeedback?: string;
 } {
-  const normUser = normalizeMathString(userAnswer);
-
-  // Check expected answers
   for (const expected of step.expectedAnswers) {
     if (isMathematicallyEquivalent(userAnswer, expected)) {
       return { isCorrect: true };
@@ -76,8 +73,8 @@ export function evaluateStepAnswer(step: ExerciseStep, userAnswer: string): {
   // Check common error feedback
   if (step.errorFeedback) {
     for (const [errorPattern, feedback] of Object.entries(step.errorFeedback)) {
-      if (normalizeMathString(errorPattern) === normUser) {
-        return { isCorrect: false, matchedFeedback: feedback };
+      if (normalizeMathString(errorPattern) === normalizeMathString(userAnswer)) {
+        return { isCorrect: false, matchedFeedback: String(feedback) };
       }
     }
   }

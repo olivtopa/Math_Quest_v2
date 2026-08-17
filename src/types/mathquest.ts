@@ -1,22 +1,24 @@
 export type CycleId = '3eme' | 'lycee' | 'terminale';
 
+export type MainTab = 'aventure' | 'rituel' | 'widgets' | 'profile';
+
 export type ErrorType = 'inattention' | 'consigne' | 'conceptuelle' | 'methode';
 
 export interface SocraticHint {
   level: 1 | 2 | 3;
   title: string;
-  content: string; // May contain LaTeX ($...$)
+  content: string;
 }
 
 export interface ExerciseStep {
   id: string;
   title: string;
-  instruction: string; // LaTeX formatted
+  instruction: string;
   expectedType: 'number' | 'expression' | 'qcm';
-  expectedAnswers: string[]; // Normalized valid mathematical answers
-  qcmChoices?: string[]; // Only if expectedType === 'qcm'
+  expectedAnswers: string[];
+  qcmChoices?: string[];
   hints: SocraticHint[];
-  errorFeedback?: Record<string, string>; // Maps regex pattern/common error to Socratic feedback
+  errorFeedback?: Record<string, string>;
 }
 
 export interface Exercise {
@@ -57,4 +59,39 @@ export interface UserProfile {
   badges: string[];
   completedExerciseIds: string[];
   grimoireCount: number;
+}
+
+export interface DynamicQuestion {
+  id: string;
+  title: string;
+  question: string;
+  options: string[];
+  answer: string;
+  explanationHtml: string;
+  svgOverlay?: (svg: SVGSVGElement) => void;
+  hints: SocraticHint[];
+}
+
+export interface GameState {
+  level: number;
+  hp: number;
+  maxHp: number;
+  gold: number;
+  xp: number;
+  energyVials: number;
+  maxEnergyVials: number;
+  dungeonsCleared: number;
+  completedQuests: string[];
+  grimoireCount: number;
+  highScores: {
+    mental: number;
+  };
+}
+
+export interface Trophy {
+  id: string;
+  title: string;
+  description: string;
+  icon: string;
+  isUnlocked: boolean;
 }

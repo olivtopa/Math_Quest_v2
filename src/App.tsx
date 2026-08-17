@@ -1,9 +1,13 @@
 import { useState, useEffect } from 'react';
-import { CycleId, UserProfile, Chapter, Exercise } from './types/mathquest';
-import { allChapters } from './data/chapters';
+import { CycleId, UserProfile, GameState, MainTab, DynamicQuestion } from './types/mathquest';
+import { generateDynamicQuestion } from './engine/dynamicQuestions';
 import { Header } from './components/Header';
-import { QuestBoard } from './components/QuestBoard';
-import { ExerciseRunner } from './components/ExerciseRunner';
+import { Navigation } from './components/Navigation';
+import { AventureView } from './components/AventureView';
+import { CombatView } from './components/CombatView';
+import { RituelView } from './components/RituelView';
+import { WidgetsView } from './components/WidgetsView';
+import { ProfileView } from './components/ProfileView';
 import { Grimoire } from './components/Grimoire';
 
 export function App() {
@@ -13,7 +17,7 @@ export function App() {
       try { return JSON.parse(saved); } catch (e) {}
     }
     return {
-      name: 'Élève',
+      name: 'Chevalier',
       cycle: '3eme',
       xp: 450,
       level: 3,
@@ -25,46 +29,117 @@ export function App() {
     };
   });
 
-  const [currentView, setCurrentView] = useState<'board' | 'exercise' | 'grimoire'>('board');
-  const [selectedExercise, setSelectedExercise] = useState<{ chapter: Chapter; exercise: Exercise } | null>(null);
+  const [gameState, setGameState] = useState<GameState>(() => {
+    const saved = localStorage.getItem('mathquest_game_state');
+    if (saved) {
+      try { return JSON.parse(saved); } catch (e) {}
+    }
+    return {
+      level: 2,
+      hp: 100,
+      maxHp: 100,
+      gold: 50,
+      xp: 450,
+      energyVials: 5,
+      maxEnergyVials: 5,
+      dungeonsCleared: 1,
+      completedQuests: [],
+      grimoireCount: 2,
+      highScores: { mental: 0 }
+    };
+  });
+
+  const [activeTab, setActiveTab] = useState<MainTab>('aventure');
+  const [currentView, setCurrentView] = useState<'tab' | 'combat' | 'grimoire'>('tab');
   const [apiMode, setApiMode] = useState(false);
+
+  // Active Combat State
+  const [activeDungeon, setActiveDungeon] = useState<{ realm: string; questIndex: number } | null>(null);
+  const [currentQuestion, setCurrentQuestion] = useState<DynamicQuestion | null>(null);
+  const [waveIndex, setWaveIndex] = useState(1);
+  const [feedbackState, setFeedbackState] = useState<{
+    show: boolean;
+    isCorrect: boolean;
+    title: string;
+    message: string;
+    explanationHtml: string;
+  } | null>(null);
 
   useEffect(() => {
     localStorage.setItem('mathquest_user_profile', JSON.stringify(userProfile));
-    // Apply body theme class
+    localStorage.setItem('mathquest_game_state', JSON.stringify(gameState));
     document.body.className = `theme-${userProfile.cycle}`;
-  }, [userProfile]);
+  }, [userProfile, gameState]);
 
   const handleCycleChange = (cycle: CycleId) => {
     setUserProfile(prev => ({ ...prev, cycle }));
   };
 
-  const handleSelectExercise = (chapter: Chapter, exercise: Exercise) => {
-    setSelectedExercise({ chapter, exercise });
-    setCurrentView('exercise');
+  const handleStartDungeon = (realm: string, questIdx: number) => {
+    setActiveDungeon({ realm, questIndex: questIdx });
+    setWaveIndex(1);
+    const firstQ = generateDynamicQuestion(realm, questIdx);
+    setCurrentQuestion(firstQ);
+    setFeedbackState(null);
+    setCurrentView('combat');
   };
 
-  const handleCompleteExercise = (rewardXP: number) => {
-    setUserProfile(prev => {
-      const newXP = prev.xp + rewardXP;
-      const newLevel = Math.floor(newXP / 200) + 1;
-      const completed = selectedExercise
-        ? [...new Set([...prev.completedExerciseIds, selectedExercise.exercise.id])]
-        : prev.completedExerciseIds;
+  const handleAnswerSubmit = (userAnswer: string) => {
+    if (!currentQuestion) return;
+    const isCorrect = userAnswer.trim().toLowerCase() === currentQuestion.answer.trim().toLowerCase();
 
-      return {
+    if (isCorrect) {
+      setGameState(prev => ({
         ...prev,
-        xp: newXP,
-        level: newLevel,
-        completedExerciseIds: completed
-      };
-    });
+        gold: prev.gold + 10,
+        xp: prev.xp + 50,
+        level: Math.floor((prev.xp + 50) / 200) + 1
+      }));
+      setFeedbackState({
+        show: true,
+        isCorrect: true,
+        title: 'Coup Critique ! (Réponse Exacte)',
+        message: 'Bravo ! Tu as terrassé le monstre avec un raisonnement impeccable.',
+        explanationHtml: currentQuestion.explanationHtml
+      });
+    } else {
+      setGameState(prev => ({
+        ...prev,
+        hp: Math.max(10, prev.hp - 15)
+      }));
+      setFeedbackState({
+        show: true,
+        isCorrect: false,
+        title: 'Attaque manquée ! (Réponse Incorrecte)',
+        message: 'Le monstre t\'a infligé des dégâts. Analyse la fiche anti-piège ci-dessous !',
+        explanationHtml: currentQuestion.explanationHtml
+      });
+    }
   };
 
-  const currentChapters = allChapters[userProfile.cycle] || [];
+  const handleNextQuestion = () => {
+    if (!activeDungeon) return;
+    if (waveIndex >= 4) {
+      // Dungeon Cleared Victory
+      setGameState(prev => ({
+        ...prev,
+        dungeonsCleared: prev.dungeonsCleared + 1,
+        gold: prev.gold + 50,
+        xp: prev.xp + 150
+      }));
+      setCurrentView('tab');
+      setActiveTab('aventure');
+    } else {
+      setWaveIndex(prev => prev + 1);
+      const nextQ = generateDynamicQuestion(activeDungeon.realm, activeDungeon.questIndex);
+      setCurrentQuestion(nextQ);
+      setFeedbackState(null);
+    }
+  };
 
   return (
-    <div className="min-h-screen flex flex-col pb-12">
+    <div className="min-h-screen flex flex-col pb-20">
+      {/* Top Header */}
       <Header
         userProfile={userProfile}
         onCycleChange={handleCycleChange}
@@ -72,35 +147,54 @@ export function App() {
         onToggleApiMode={() => setApiMode(!apiMode)}
       />
 
+      {/* Main Container */}
       <main className="flex-1">
-        {currentView === 'board' && (
-          <QuestBoard
-            chapters={currentChapters}
-            userProfile={userProfile}
-            onSelectExercise={handleSelectExercise}
-            onOpenGrimoire={() => setCurrentView('grimoire')}
-          />
+        {currentView === 'tab' && (
+          <>
+            {activeTab === 'aventure' && (
+              <AventureView
+                gameState={gameState}
+                userProfile={userProfile}
+                onStartDungeon={handleStartDungeon}
+                onOpenGrimoire={() => setCurrentView('grimoire')}
+              />
+            )}
+            {activeTab === 'rituel' && <RituelView />}
+            {activeTab === 'widgets' && <WidgetsView />}
+            {activeTab === 'profile' && <ProfileView gameState={gameState} userProfile={userProfile} />}
+          </>
         )}
 
-        {currentView === 'exercise' && selectedExercise && (
-          <ExerciseRunner
-            exercise={selectedExercise.exercise}
-            onBack={() => setCurrentView('board')}
-            onComplete={handleCompleteExercise}
+        {currentView === 'combat' && currentQuestion && (
+          <CombatView
+            question={currentQuestion}
+            monsterName="Spectre de l'Erreur"
+            waveText={`Monstre ${waveIndex}/4`}
+            onAnswerSubmit={handleAnswerSubmit}
+            onNextQuestion={handleNextQuestion}
+            onBackToMap={() => {
+              setCurrentView('tab');
+              setActiveTab('aventure');
+            }}
+            feedbackState={feedbackState}
           />
         )}
 
         {currentView === 'grimoire' && (
           <Grimoire
-            onBack={() => setCurrentView('board')}
+            onBack={() => {
+              setCurrentView('tab');
+              setActiveTab('aventure');
+            }}
             grimoireCount={userProfile.grimoireCount}
           />
         )}
       </main>
 
-      <footer className="text-center py-6 text-xs text-slate-500 border-t border-slate-900 mt-8">
-        <p>Math Quest v2 • Plateforme Éducative Socratique Multi-Cycles (3ème à Terminale)</p>
-      </footer>
+      {/* Bottom Navigation (4 Main Tabs) */}
+      {currentView === 'tab' && (
+        <Navigation activeTab={activeTab} onTabChange={(tab) => setActiveTab(tab)} />
+      )}
     </div>
   );
 }
