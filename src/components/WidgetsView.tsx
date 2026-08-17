@@ -14,16 +14,16 @@ export const WidgetsView: React.FC = () => {
   return (
     <div className="max-w-6xl mx-auto px-4 py-6 space-y-6">
       {/* Banner */}
-      <div className="mq-glass p-8 relative overflow-hidden bg-gradient-to-r from-teal-950/60 via-slate-900 to-slate-950 border border-teal-500/30">
-        <div className="space-y-2 max-w-2xl">
-          <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-teal-500/20 text-teal-300 border border-teal-500/40 text-xs font-bold">
+      <div className="mq-glass p-6 sm:p-8 relative overflow-hidden bg-gradient-to-r from-teal-950/60 via-slate-900 to-slate-950 border border-teal-500/30">
+        <div className="space-y-3 max-w-2xl">
+          <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-teal-500/20 text-teal-300 border border-teal-500/40 text-xs sm:text-sm font-bold">
             <Wrench className="w-4 h-4 text-teal-400" />
             <span>Laboratoire d'Expérimentation visuelle</span>
           </div>
-          <h2 className="text-3xl font-extrabold text-white tracking-tight">
+          <h2 className="text-2xl sm:text-3xl font-extrabold text-white tracking-tight">
             Widgets & Manipulations Interactives
           </h2>
-          <p className="text-slate-300 text-sm leading-relaxed">
+          <p className="text-slate-300 text-sm sm:text-base leading-relaxed">
             Manipule en temps réel les concepts mathématiques pour forger des représentations mentales indestructibles.
           </p>
         </div>
@@ -37,10 +37,10 @@ export const WidgetsView: React.FC = () => {
             <div className="p-3 bg-teal-500/15 text-teal-400 rounded-xl w-fit border border-teal-500/30">
               <TrendingUp className="w-6 h-6" />
             </div>
-            <h3 className="text-lg font-bold text-white">Labo des Fonctions ($y = ax + b$)</h3>
-            <p className="text-xs text-slate-400 leading-relaxed">Glisse des curseurs pour observer en temps réel la droite se déplacer et varier la pente.</p>
+            <h3 className="text-lg sm:text-xl font-bold text-white">Labo des Fonctions ($y = ax + b$)</h3>
+            <p className="text-xs sm:text-sm text-slate-300 leading-relaxed">Glisse des curseurs pour observer en temps réel la droite se déplacer et varier la pente.</p>
           </div>
-          <button onClick={() => setActiveWidget('functions')} className="mq-btn-secondary text-xs w-full text-teal-300 border-teal-500/30 bg-teal-500/10">
+          <button onClick={() => setActiveWidget('functions')} className="mq-btn-secondary text-xs sm:text-sm w-full text-teal-300 border-teal-500/30 bg-teal-500/10">
             Ouvrir le Labo →
           </button>
         </div>
@@ -51,10 +51,10 @@ export const WidgetsView: React.FC = () => {
             <div className="p-3 bg-emerald-500/15 text-emerald-400 rounded-xl w-fit border border-emerald-500/30">
               <Triangle className="w-6 h-6" />
             </div>
-            <h3 className="text-lg font-bold text-white">Trigonométrie Active</h3>
-            <p className="text-xs text-slate-400 leading-relaxed">Modifie un angle et observe l'évolution en direct des rapports $\\cos, \\sin, \\tan$.</p>
+            <h3 className="text-lg sm:text-xl font-bold text-white">Trigonométrie Active</h3>
+            <p className="text-xs sm:text-sm text-slate-300 leading-relaxed">Modifie un angle et observe l'évolution en direct des rapports $\\cos, \\sin, \\tan$.</p>
           </div>
-          <button onClick={() => setActiveWidget('trigonometry')} className="mq-btn-secondary text-xs w-full text-emerald-300 border-emerald-500/30 bg-emerald-500/10">
+          <button onClick={() => setActiveWidget('trigonometry')} className="mq-btn-secondary text-xs sm:text-sm w-full text-emerald-300 border-emerald-500/30 bg-emerald-500/10">
             Ouvrir le Labo →
           </button>
         </div>
@@ -65,10 +65,10 @@ export const WidgetsView: React.FC = () => {
             <div className="p-3 bg-purple-500/15 text-purple-400 rounded-xl w-fit border border-purple-500/30">
               <Cpu className="w-6 h-6" />
             </div>
-            <h3 className="text-lg font-bold text-white">Labo Scratch & Algo</h3>
-            <p className="text-xs text-slate-400 leading-relaxed">Simule des blocs d'instructions Scratch et visualise le comportement d'un lutin.</p>
+            <h3 className="text-lg sm:text-xl font-bold text-white">Labo Scratch & Algo</h3>
+            <p className="text-xs sm:text-sm text-slate-300 leading-relaxed">Simule des blocs d'instructions Scratch et visualise le comportement d'un lutin.</p>
           </div>
-          <button onClick={() => setActiveWidget('scratch')} className="mq-btn-secondary text-xs w-full text-purple-300 border-purple-500/30 bg-purple-500/10">
+          <button onClick={() => setActiveWidget('scratch')} className="mq-btn-secondary text-xs sm:text-sm w-full text-purple-300 border-purple-500/30 bg-purple-500/10">
             Ouvrir le Labo →
           </button>
         </div>
@@ -88,7 +88,7 @@ export const WidgetsView: React.FC = () => {
                 
                 <div className="space-y-4 bg-slate-950 p-4 rounded-xl border border-slate-800">
                   <div>
-                    <label className="text-xs text-slate-300 flex justify-between">
+                    <label className="text-sm text-slate-200 flex justify-between">
                       <span>Coefficient directeur (a) = {sliderA}</span>
                     </label>
                     <input
@@ -102,7 +102,7 @@ export const WidgetsView: React.FC = () => {
                   </div>
 
                   <div>
-                    <label className="text-xs text-slate-300 flex justify-between">
+                    <label className="text-sm text-slate-200 flex justify-between">
                       <span>Ordonnée à l'origine (b) = {sliderB}</span>
                     </label>
                     <input
@@ -145,18 +145,18 @@ export const WidgetsView: React.FC = () => {
                   onChange={(e) => setTrigoAngle(Number(e.target.value))}
                   className="w-full accent-emerald-500"
                 />
-                <div className="grid grid-cols-3 gap-3 text-center text-xs">
+                <div className="grid grid-cols-3 gap-3 text-center text-sm">
                   <div className="p-3 bg-slate-900 rounded-xl border border-slate-800">
-                    <span className="text-slate-400 block">$\sin({trigoAngle}^\circ)$</span>
-                    <span className="text-amber-400 font-bold text-base">{Math.sin((trigoAngle * Math.PI) / 180).toFixed(3)}</span>
+                    <span className="text-slate-300 block">$\sin({trigoAngle}^\circ)$</span>
+                    <span className="text-amber-400 font-bold text-lg">{Math.sin((trigoAngle * Math.PI) / 180).toFixed(3)}</span>
                   </div>
                   <div className="p-3 bg-slate-900 rounded-xl border border-slate-800">
-                    <span className="text-slate-400 block">$\cos({trigoAngle}^\circ)$</span>
-                    <span className="text-emerald-400 font-bold text-base">{Math.cos((trigoAngle * Math.PI) / 180).toFixed(3)}</span>
+                    <span className="text-slate-300 block">$\cos({trigoAngle}^\circ)$</span>
+                    <span className="text-emerald-400 font-bold text-lg">{Math.cos((trigoAngle * Math.PI) / 180).toFixed(3)}</span>
                   </div>
                   <div className="p-3 bg-slate-900 rounded-xl border border-slate-800">
-                    <span className="text-slate-400 block">$\tan({trigoAngle}^\circ)$</span>
-                    <span className="text-purple-400 font-bold text-base">{Math.tan((trigoAngle * Math.PI) / 180).toFixed(3)}</span>
+                    <span className="text-slate-300 block">$\tan({trigoAngle}^\circ)$</span>
+                    <span className="text-purple-400 font-bold text-lg">{Math.tan((trigoAngle * Math.PI) / 180).toFixed(3)}</span>
                   </div>
                 </div>
               </div>
@@ -165,8 +165,8 @@ export const WidgetsView: React.FC = () => {
             {activeWidget === 'scratch' && (
               <div className="space-y-4 text-center">
                 <h3 className="text-xl font-bold text-white">Labo Scratch Express</h3>
-                <p className="text-xs text-slate-300">Assemble des instructions conditionnelles et regarde le lutin avancer.</p>
-                <div className="p-4 bg-amber-500/10 border border-amber-500/30 rounded-xl text-amber-300 text-xs font-mono">
+                <p className="text-sm text-slate-300">Assemble des instructions conditionnelles et regarde le lutin avancer.</p>
+                <div className="p-4 bg-amber-500/10 border border-amber-500/30 rounded-xl text-amber-300 text-sm font-mono">
                   si X &gt; 10 alors Mettre Score à 100 sinon Mettre Score à 30
                 </div>
               </div>
