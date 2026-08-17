@@ -1,6 +1,10 @@
-/* Math Quest v2 — Masterpiece Design System & WOW FX Engine */
-
 @import url('https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800;900&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Space+Grotesk:wght@500;700&display=swap');
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* Math Quest v2 — Masterpiece Design System & WOW FX Engine */
 
 :root {
   /* Common Dark Theme Palette */
