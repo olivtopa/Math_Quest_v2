@@ -70,15 +70,15 @@ export function App() {
         onCycleChange={handleCycleChange}
         apiMode={apiMode}
         onToggleApiMode={() => setApiMode(!apiMode)}
-        onOpenGrimoire={() => setCurrentView('grimoire')}
       />
 
       <main className="flex-1">
         {currentView === 'board' && (
           <QuestBoard
             chapters={currentChapters}
+            userProfile={userProfile}
             onSelectExercise={handleSelectExercise}
-            completedExerciseIds={userProfile.completedExerciseIds}
+            onOpenGrimoire={() => setCurrentView('grimoire')}
           />
         )}
 
