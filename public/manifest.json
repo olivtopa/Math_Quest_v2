@@ -1,0 +1,16 @@
+{
+  "name": "Math Quest v2 — L'Aventure Socratique",
+  "short_name": "MathQuest",
+  "description": "Tuteur Socratique & Apprentissage Gamifié des Mathématiques de la 3ème à la Terminale",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#0f172a",
+  "theme_color": "#0f172a",
+  "icons": [
+    {
+      "src": "/favicon.svg",
+      "sizes": "192x192 512x512",
+      "type": "image/svg+xml"
+    }
+  ]
+}
