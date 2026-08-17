@@ -22,13 +22,13 @@ export const Header: React.FC<HeaderProps> = ({
         <div className="flex items-center gap-3 cursor-pointer">
           <div className="w-11 h-11 rounded-2xl bg-gradient-to-tr from-amber-500 via-purple-600 to-blue-500 p-0.5 shadow-lg shadow-amber-500/10">
             <div className="w-full h-full bg-slate-950 rounded-[14px] flex items-center justify-center font-black text-amber-400 text-xl tracking-tighter">
-              MQ
+              TM
             </div>
           </div>
           <div>
             <div className="flex items-center gap-2">
               <h1 className="text-xl font-extrabold tracking-tight bg-gradient-to-r from-amber-300 via-purple-300 to-blue-300 bg-clip-text text-transparent">
-                Math Quest
+                Tijob Math
               </h1>
               <span className="text-[10px] font-bold px-2 py-0.5 rounded-full bg-amber-500/20 text-amber-300 border border-amber-500/40 uppercase tracking-wider">
                 v2.0
