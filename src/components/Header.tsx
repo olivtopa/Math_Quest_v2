@@ -18,11 +18,11 @@ export const Header: React.FC<HeaderProps> = ({
       {/* Top Row / Left Section: Brand & Active Cycle Badge */}
       <div className="flex items-center justify-between w-full sm:w-auto gap-4">
         <div className="flex items-center gap-3">
-          <div className="w-10 h-10 sm:w-12 sm:h-12 rounded-xl sm:rounded-2xl bg-gradient-to-tr from-amber-500 via-purple-600 to-blue-500 p-0.5 shadow-md shrink-0">
-            <div className="w-full h-full bg-slate-950 rounded-[10px] sm:rounded-[14px] flex items-center justify-center font-black text-amber-400 text-lg sm:text-2xl tracking-tighter">
-              TM
-            </div>
-          </div>
+          <img
+            src="/icon.png"
+            alt="Tijob Math Logo"
+            className="w-10 h-10 sm:w-12 sm:h-12 rounded-xl sm:rounded-2xl shadow-md shrink-0 object-cover border border-amber-500/40"
+          />
           <div>
             <div className="flex items-center gap-2">
               <h1 className="text-lg sm:text-2xl font-extrabold tracking-tight bg-gradient-to-r from-amber-300 via-purple-300 to-blue-300 bg-clip-text text-transparent leading-tight">
