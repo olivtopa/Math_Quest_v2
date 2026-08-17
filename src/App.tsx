@@ -73,6 +73,11 @@ export function App() {
     document.body.className = `theme-${userProfile.cycle}`;
   }, [userProfile, gameState]);
 
+  // Auto-scroll to top of page on any view or tab transition
+  useEffect(() => {
+    window.scrollTo({ top: 0, behavior: 'instant' });
+  }, [activeTab, currentView]);
+
   const handleCycleChange = (cycle: CycleId) => {
     setUserProfile(prev => ({ ...prev, cycle }));
   };
