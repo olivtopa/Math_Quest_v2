@@ -110,10 +110,45 @@ export function App() {
         explanationHtml: currentQuestion.explanationHtml
       });
     } else {
-      setGameState(prev => ({
-        ...prev,
-        hp: Math.max(10, prev.hp - 15)
-      }));
+      // Enregistrement de l'erreur dans la Zone de Renforcement
+      if (activeDungeon) {
+        setGameState(prev => {
+          const currentWeaks = prev.weakTopics || [];
+          const existingIdx = currentWeaks.findIndex(
+            w => w.realm === activeDungeon.realm && w.questIndex === activeDungeon.questIndex
+          );
+
+          let updatedWeaks = [...currentWeaks];
+          if (existingIdx >= 0) {
+            updatedWeaks[existingIdx] = {
+              ...updatedWeaks[existingIdx],
+              errorCount: updatedWeaks[existingIdx].errorCount + 1,
+              lastFailedAt: Date.now()
+            };
+          } else {
+            updatedWeaks.unshift({
+              topicId: `${activeDungeon.realm}_${activeDungeon.questIndex}`,
+              realm: activeDungeon.realm,
+              questIndex: activeDungeon.questIndex,
+              title: currentQuestion.title || 'Notion à consolider',
+              errorCount: 1,
+              lastFailedAt: Date.now()
+            });
+          }
+
+          return {
+            ...prev,
+            hp: Math.max(10, prev.hp - 15),
+            weakTopics: updatedWeaks.slice(0, 5)
+          };
+        });
+      } else {
+        setGameState(prev => ({
+          ...prev,
+          hp: Math.max(10, prev.hp - 15)
+        }));
+      }
+
       setFeedbackState({
         show: true,
         isCorrect: false,
@@ -134,6 +169,7 @@ export function App() {
         dungeonsCleared: prev.dungeonsCleared + 1,
         gold: prev.gold + 50,
         xp: prev.xp + 150,
+        energyVials: Math.min(prev.maxEnergyVials, prev.energyVials + 1),
         completedQuests: Array.from(new Set([...(prev.completedQuests || []), questKey]))
       }));
       setCurrentView('tab');
@@ -167,7 +203,23 @@ export function App() {
                 onOpenGrimoire={() => setCurrentView('grimoire')}
               />
             )}
-            {activeTab === 'rituel' && <RituelView />}
+            {activeTab === 'rituel' && (
+              <RituelView
+                gameState={gameState}
+                onUpdateGameState={setGameState}
+                onAddRewards={(xp, gold) => {
+                  setUserProfile(prev => ({
+                    ...prev,
+                    xp: prev.xp + xp,
+                    level: Math.floor((prev.xp + xp) / 200) + 1
+                  }));
+                  setGameState(prev => ({
+                    ...prev,
+                    gold: prev.gold + gold
+                  }));
+                }}
+              />
+            )}
             {activeTab === 'widgets' && <WidgetsView />}
             {activeTab === 'profile' && <ProfileView gameState={gameState} userProfile={userProfile} />}
           </>
@@ -195,6 +247,10 @@ export function App() {
               setActiveTab('aventure');
             }}
             grimoireCount={userProfile.grimoireCount}
+            gameState={gameState}
+            onStartRenforcement={(realm, questIdx) => {
+              handleStartDungeon(realm, questIdx);
+            }}
           />
         )}
       </main>

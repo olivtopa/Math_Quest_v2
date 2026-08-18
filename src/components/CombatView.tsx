@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { DynamicQuestion, SocraticHint } from '../types/mathquest';
 import { MathRenderer } from './MathRenderer';
-import { ArrowLeft, Lightbulb, Shield, Heart } from 'lucide-react';
+import { ArrowLeft, Lightbulb, Shield, Heart, Sparkles } from 'lucide-react';
 
 interface CombatViewProps {
   question: DynamicQuestion;
@@ -136,11 +136,19 @@ export const CombatView: React.FC<CombatViewProps> = ({
         ) : (
           /* Didactic Anti-Trap Proof Sheet & Feedback */
           <div className="bg-slate-950/95 border border-amber-500/40 rounded-2xl p-6 sm:p-8 space-y-6 shadow-2xl">
-            <div className="flex items-center gap-3">
-              <span className="text-3xl">{feedbackState.isCorrect ? '✨' : '💥'}</span>
-              <h3 className={`text-lg sm:text-xl font-extrabold ${feedbackState.isCorrect ? 'text-emerald-400' : 'text-rose-400'}`}>
-                {feedbackState.title}
-              </h3>
+            <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+              <div className="flex items-center gap-3">
+                <span className="text-3xl">{feedbackState.isCorrect ? '✨' : '💥'}</span>
+                <h3 className={`text-lg sm:text-xl font-extrabold ${feedbackState.isCorrect ? 'text-emerald-400' : 'text-rose-400'}`}>
+                  {feedbackState.title}
+                </h3>
+              </div>
+              {feedbackState.isCorrect && (
+                <div className="flex items-center gap-2 self-start sm:self-auto px-3 py-1 rounded-full bg-emerald-500/10 border border-emerald-500/30 text-emerald-300 font-bold text-xs sm:text-sm animate-pulse">
+                  <Sparkles className="w-4 h-4 text-emerald-400" />
+                  <span>+50 XP • +10 🪙</span>
+                </div>
+              )}
             </div>
 
             <p className="text-base sm:text-lg text-slate-200 leading-relaxed font-medium">

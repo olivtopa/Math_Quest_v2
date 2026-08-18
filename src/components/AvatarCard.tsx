@@ -71,7 +71,7 @@ export const AvatarCard: React.FC<AvatarCardProps> = ({ userProfile, onOpenGrimo
           className="mq-btn-secondary text-xs sm:text-sm py-2.5 px-4 bg-amber-500/10 border-amber-500/30 text-amber-300 hover:bg-amber-500/20 flex-1 sm:flex-initial"
         >
           <ShieldAlert className="w-4 h-4 text-amber-400 shrink-0" />
-          <span>Grimoire ({userProfile.grimoireCount})</span>
+          <span>Renforcement ({userProfile.grimoireCount})</span>
         </button>
       </div>
     </div>

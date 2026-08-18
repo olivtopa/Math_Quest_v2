@@ -83,8 +83,18 @@ export interface GameState {
   dungeonsCleared: number;
   completedQuests: string[];
   grimoireCount: number;
+  weakTopics?: {
+    topicId: string;
+    realm: string;
+    questIndex: number;
+    title: string;
+    errorCount: number;
+    lastFailedAt: number;
+  }[];
   highScores: {
     mental: number;
+    flashcards?: number;
+    geometry?: number;
   };
 }
 

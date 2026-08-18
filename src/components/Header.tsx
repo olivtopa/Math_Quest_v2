@@ -36,47 +36,52 @@ export const Header: React.FC<HeaderProps> = ({
           </div>
         </div>
 
-        {/* Cycle Tabs (Displays only purchased modules, default: 3ème / Brevet) */}
-        <div className="flex items-center bg-slate-950/90 p-1.5 rounded-xl border border-slate-800/90 shrink-0">
-          {purchasedCycles.includes('3eme') && (
-            <button
-              onClick={() => onCycleChange('3eme')}
-              className={`px-3 py-1.5 sm:px-4 sm:py-2 rounded-lg sm:rounded-xl text-xs sm:text-sm font-bold transition-all ${
-                userProfile.cycle === '3eme'
-                  ? 'bg-gradient-to-r from-amber-500 to-amber-600 text-slate-950 shadow-md shadow-amber-500/20'
-                  : 'text-slate-400 hover:text-slate-200'
-              }`}
-            >
-              3ème / Brevet
-            </button>
-          )}
-
-          {purchasedCycles.includes('lycee') && (
-            <button
-              onClick={() => onCycleChange('lycee')}
-              className={`px-3 py-1.5 sm:px-4 sm:py-2 rounded-lg sm:rounded-xl text-xs sm:text-sm font-bold transition-all ${
-                userProfile.cycle === 'lycee'
-                  ? 'bg-gradient-to-r from-purple-600 to-indigo-600 text-white shadow-md shadow-purple-600/20'
-                  : 'text-slate-400 hover:text-slate-200'
-              }`}
-            >
-              Seconde / 1ère
-            </button>
-          )}
-
-          {purchasedCycles.includes('terminale') && (
-            <button
-              onClick={() => onCycleChange('terminale')}
-              className={`px-3 py-1.5 sm:px-4 sm:py-2 rounded-lg sm:rounded-xl text-xs sm:text-sm font-bold transition-all ${
-                userProfile.cycle === 'terminale'
-                  ? 'bg-gradient-to-r from-blue-600 to-pink-600 text-white shadow-md shadow-blue-600/20'
-                  : 'text-slate-400 hover:text-slate-200'
-              }`}
-            >
-              Terminale Spé
-            </button>
-          )}
-        </div>
+        {/* Indicateur de Cycle / Programme (Élégant et informatif, non-bouton si unique) */}
+        {purchasedCycles.length > 1 ? (
+          <div className="flex items-center bg-slate-950/90 p-1.5 rounded-xl border border-slate-800/90 shrink-0">
+            {purchasedCycles.includes('3eme') && (
+              <button
+                onClick={() => onCycleChange('3eme')}
+                className={`px-3 py-1.5 sm:px-4 sm:py-2 rounded-lg sm:rounded-xl text-xs sm:text-sm font-bold transition-all ${
+                  userProfile.cycle === '3eme'
+                    ? 'bg-amber-500/20 text-amber-300 border border-amber-500/40'
+                    : 'text-slate-400 hover:text-slate-200'
+                }`}
+              >
+                3ème / Brevet
+              </button>
+            )}
+            {purchasedCycles.includes('lycee') && (
+              <button
+                onClick={() => onCycleChange('lycee')}
+                className={`px-3 py-1.5 sm:px-4 sm:py-2 rounded-lg sm:rounded-xl text-xs sm:text-sm font-bold transition-all ${
+                  userProfile.cycle === 'lycee'
+                    ? 'bg-purple-500/20 text-purple-300 border border-purple-500/40'
+                    : 'text-slate-400 hover:text-slate-200'
+                }`}
+              >
+                Seconde / 1ère
+              </button>
+            )}
+            {purchasedCycles.includes('terminale') && (
+              <button
+                onClick={() => onCycleChange('terminale')}
+                className={`px-3 py-1.5 sm:px-4 sm:py-2 rounded-lg sm:rounded-xl text-xs sm:text-sm font-bold transition-all ${
+                  userProfile.cycle === 'terminale'
+                    ? 'bg-blue-500/20 text-blue-300 border border-blue-500/40'
+                    : 'text-slate-400 hover:text-slate-200'
+                }`}
+              >
+                Terminale Spé
+              </button>
+            )}
+          </div>
+        ) : (
+          <div className="flex items-center gap-2 px-3 py-1 rounded-lg border border-slate-800 bg-slate-900/60 text-slate-300 text-xs sm:text-sm font-medium tracking-wide">
+            <span className="w-2 h-2 rounded-full bg-amber-400/80"></span>
+            <span>Programme 3ème / Brevet</span>
+          </div>
+        )}
       </div>
 
       {/* Gamification Stats: Fioles & XP */}
