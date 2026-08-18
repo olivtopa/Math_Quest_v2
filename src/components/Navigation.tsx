@@ -9,10 +9,10 @@ interface NavigationProps {
 
 export const Navigation: React.FC<NavigationProps> = ({ activeTab, onTabChange }) => {
   const tabs: { id: MainTab; label: string; icon: React.ReactNode }[] = [
-    { id: 'aventure', label: 'Aventure', icon: <Compass className="w-5 h-5 sm:w-6 sm:h-6" /> },
-    { id: 'rituel', label: 'Rituel 45s', icon: <Clock className="w-5 h-5 sm:w-6 sm:h-6" /> },
-    { id: 'widgets', label: 'Widgets', icon: <Wrench className="w-5 h-5 sm:w-6 sm:h-6" /> },
-    { id: 'profile', label: 'Profil', icon: <Shield className="w-5 h-5 sm:w-6 sm:h-6" /> }
+    { id: 'aventure', label: 'Aventure', icon: <Compass className="w-5 h-5 sm:w-6 sm:h-6" strokeWidth={2.2} /> },
+    { id: 'rituel', label: 'Rituel 45s', icon: <Clock className="w-5 h-5 sm:w-6 sm:h-6" strokeWidth={2.2} /> },
+    { id: 'widgets', label: 'Widgets', icon: <Wrench className="w-5 h-5 sm:w-6 sm:h-6" strokeWidth={2.2} /> },
+    { id: 'profile', label: 'Profil', icon: <Shield className="w-5 h-5 sm:w-6 sm:h-6" strokeWidth={2.2} /> }
   ];
 
   return (

@@ -1,74 +1,76 @@
 import React from 'react';
 import { UserProfile } from '../types/mathquest';
-import { Sparkles, Compass, Flame, ShieldAlert } from 'lucide-react';
+import { ShieldAlert, Play, ArrowRight } from 'lucide-react';
 
 interface AvatarCardProps {
   userProfile: UserProfile;
   onOpenGrimoire: () => void;
+  onContinueQuest?: () => void;
 }
 
-export const AvatarCard: React.FC<AvatarCardProps> = ({ userProfile, onOpenGrimoire }) => {
+export const AvatarCard: React.FC<AvatarCardProps> = ({ userProfile, onOpenGrimoire, onContinueQuest }) => {
   const getAvatarTitle = () => {
     switch (userProfile.cycle) {
-      case '3eme': return { name: 'Archimage Maïeutique', title: 'Guide du Brevet & Collège', icon: '🧙‍♂️', color: 'from-amber-500 to-emerald-500' };
-      case 'lycee': return { name: 'Mentor Cyber-Math', title: 'Stratège Seconde & 1ère', icon: '🤖', color: 'from-purple-500 to-cyan-500' };
-      case 'terminale': return { name: 'Directeur du Lab d\'Élite', title: 'Expert Spé & Bac', icon: '⚡', color: 'from-blue-500 to-pink-500' };
+      case '3eme': return { name: 'Archimage', title: 'Guide IA Brevet & Collège', icon: '🧙‍♂️', color: 'from-amber-500 to-emerald-500' };
+      case 'lycee': return { name: 'Mentor Cyber-Math', title: 'Guide IA Seconde & 1ère', icon: '🤖', color: 'from-purple-500 to-cyan-500' };
+      case 'terminale': return { name: 'Directeur du Lab', title: 'Guide IA Spé & Bac', icon: '⚡', color: 'from-blue-500 to-pink-500' };
     }
   };
 
   const avatar = getAvatarTitle();
 
   return (
-    <div className="mq-glass mq-glass-interactive p-4 sm:p-6 relative overflow-hidden flex flex-col md:flex-row items-stretch md:items-center justify-between gap-4 sm:gap-6 border-l-4 border-l-amber-500 max-w-full">
+    <div className="mq-glass p-5 sm:p-6 relative overflow-hidden space-y-4 border-l-4 border-l-amber-500 rounded-2xl max-w-full shadow-xl">
       {/* Background ambient radial */}
       <div className="absolute -right-12 -top-12 w-48 h-48 bg-amber-500/10 rounded-full blur-3xl pointer-events-none" />
 
-      {/* Left Avatar Identity */}
-      <div className="flex items-center gap-4 sm:gap-5">
+      {/* 1. En-tête de la carte : Avatar avec badge vert de présence en ligne */}
+      <div className="flex items-center gap-3.5">
         <div className="relative shrink-0">
-          <div className={`w-16 h-16 sm:w-20 sm:h-20 rounded-xl sm:rounded-2xl bg-gradient-to-tr ${avatar.color} p-1 shadow-xl animate-float`}>
-            <div className="w-full h-full bg-slate-950 rounded-[10px] sm:rounded-[14px] flex items-center justify-center text-3xl sm:text-4xl shadow-inner">
+          <div className={`w-12 h-12 sm:w-14 sm:h-14 rounded-2xl bg-gradient-to-tr ${avatar.color} p-0.5 shadow-lg animate-float`}>
+            <div className="w-full h-full bg-slate-950 rounded-[14px] flex items-center justify-center text-2xl sm:text-3xl shadow-inner">
               {avatar.icon}
             </div>
           </div>
-          <span className="absolute -bottom-0.5 -right-0.5 flex h-4 w-4">
+          {/* Badge vert de présence en ligne */}
+          <span className="absolute -bottom-0.5 -right-0.5 flex h-3.5 w-3.5">
             <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75"></span>
-            <span className="relative inline-flex rounded-full h-4 w-4 bg-emerald-500 border-2 border-slate-950"></span>
+            <span className="relative inline-flex rounded-full h-3.5 w-3.5 bg-emerald-500 border-2 border-slate-950"></span>
           </span>
         </div>
 
-        <div className="space-y-1">
-          <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-amber-500/15 border border-amber-500/30 text-amber-300 text-xs sm:text-sm font-bold">
-            <Sparkles className="w-3.5 h-3.5 text-amber-400 shrink-0" />
-            <span>Posture Socratique Active</span>
+        <div>
+          <div className="flex items-center gap-2">
+            <h3 className="text-base sm:text-lg font-black text-white leading-tight">{avatar.name}</h3>
+            <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded-full bg-emerald-500/15 border border-emerald-500/30 text-emerald-300 text-[10px] font-bold">
+              <span className="w-1.5 h-1.5 rounded-full bg-emerald-400"></span> En ligne
+            </span>
           </div>
-          <h3 className="text-lg sm:text-2xl font-extrabold text-white tracking-tight leading-tight">{avatar.name}</h3>
-          <p className="text-xs sm:text-sm text-slate-300 font-medium">{avatar.title}</p>
+          <p className="text-xs text-slate-400 font-medium">{avatar.title}</p>
         </div>
       </div>
 
-      {/* Center Dynamic Speech Bubble */}
-      <div className="flex-1 bg-slate-950/70 p-4 sm:p-5 rounded-xl border border-slate-800/80 text-xs sm:text-sm text-slate-200 space-y-1.5 relative max-w-full">
-        <div className="font-extrabold text-amber-400 flex items-center gap-2 text-xs sm:text-sm">
-          <Compass className="w-4 h-4 shrink-0" /> Message du Tuteur :
-        </div>
-        <p className="leading-relaxed">
-          « Mon rôle n'est pas de te donner les réponses, mais de développer ton intuition mathématique pas à pas. Prêt pour la prochaine quête ? »
+      {/* 2. Bulle de dialogue stylisée façon Chat */}
+      <div className="relative bg-slate-950/80 p-3.5 sm:p-4 rounded-2xl rounded-tl-sm border border-slate-800 text-xs sm:text-sm text-slate-200 shadow-inner space-y-1">
+        <p className="leading-relaxed font-medium">
+          « Prêt pour ta quête du jour ? Pose-moi tes questions, je t'aide à trouver la méthode pas à pas ! »
         </p>
       </div>
 
-      {/* Right Quick Stats & Actions */}
-      <div className="flex items-center justify-between sm:justify-start gap-3 shrink-0 w-full sm:w-auto">
-        <div className="text-center px-4 py-2 sm:px-5 sm:py-2.5 bg-slate-900/90 rounded-xl border border-slate-800 flex-1 sm:flex-initial">
-          <div className="text-xs text-slate-300 font-semibold flex items-center justify-center gap-1">
-            <Flame className="w-4 h-4 text-amber-500 shrink-0" /> Série
-          </div>
-          <div className="text-lg sm:text-xl font-black text-amber-400">3 Jours</div>
-        </div>
+      {/* 3. Zone d'action intégrée (CTA Principal + Renforcement secondaire) */}
+      <div className="flex flex-col sm:flex-row items-stretch sm:items-center gap-3 pt-1">
+        <button
+          onClick={onContinueQuest}
+          className="mq-btn-primary flex-1 py-3 text-xs sm:text-sm font-extrabold bg-gradient-to-r from-emerald-500 to-teal-500 text-slate-950 shadow-lg shadow-emerald-500/15 flex items-center justify-center gap-2"
+        >
+          <Play className="w-4 h-4 fill-slate-950" />
+          <span>Continuer la quête</span>
+          <ArrowRight className="w-4 h-4" />
+        </button>
 
         <button
           onClick={onOpenGrimoire}
-          className="mq-btn-secondary text-xs sm:text-sm py-2.5 px-4 bg-amber-500/10 border-amber-500/30 text-amber-300 hover:bg-amber-500/20 flex-1 sm:flex-initial"
+          className="mq-btn-secondary py-3 px-5 text-xs sm:text-sm font-bold border-amber-500/40 text-amber-300 bg-amber-500/10 hover:bg-amber-500/20 flex items-center justify-center gap-2"
         >
           <ShieldAlert className="w-4 h-4 text-amber-400 shrink-0" />
           <span>Renforcement ({userProfile.grimoireCount})</span>

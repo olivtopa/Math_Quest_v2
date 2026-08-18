@@ -1,7 +1,7 @@
 import React from 'react';
 import { GameState, UserProfile } from '../types/mathquest';
 import { AvatarCard } from './AvatarCard';
-import { Lock, Sparkles, ChevronRight, CheckCircle2 } from 'lucide-react';
+import { Lock, ChevronRight, CheckCircle2 } from 'lucide-react';
 
 interface AventureViewProps {
   gameState: GameState;
@@ -68,42 +68,87 @@ export const AventureView: React.FC<AventureViewProps> = ({
     }
   ];
 
-  return (
-    <div className="max-w-6xl mx-auto px-4 py-6 space-y-6 sm:space-y-8 overflow-hidden">
-      {/* Avatar Card Header */}
-      <AvatarCard userProfile={userProfile} onOpenGrimoire={onOpenGrimoire} />
+  // Calcul du nombre de royaumes terminés
+  const completedCount = realms.filter((realm) => {
+    return realm.quests.every((_, qIdx) => gameState.completedQuests?.includes(`${realm.id}_${qIdx}`));
+  }).length;
 
-      {/* Hero Banner */}
-      <div className="mq-glass p-5 sm:p-8 relative overflow-hidden bg-gradient-to-r from-slate-950 via-slate-900 to-slate-950 border border-slate-700/60 max-w-full">
-        <div className="absolute top-0 right-0 w-80 h-80 bg-emerald-500/10 rounded-full blur-3xl pointer-events-none animate-pulse" />
-        <div className="relative z-10 space-y-3 max-w-2xl">
-          <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-emerald-500/15 border border-emerald-500/30 text-emerald-300 text-xs sm:text-sm font-bold leading-tight">
-            <Sparkles className="w-4 h-4 text-emerald-400 shrink-0" />
-            <span>Royaumes du Savoir — Préparation Brevet & Lycée</span>
-          </div>
-          <h2 className="text-2xl sm:text-3xl md:text-4xl font-extrabold text-white tracking-tight leading-tight">
-            Conquiers les 4 Piliers indispensables !
+  // Lancer la première quête non terminée
+  const handleContinueNextQuest = () => {
+    for (const realm of realms) {
+      if (gameState.level >= realm.minLevel) {
+        for (let qIdx = 0; qIdx < realm.quests.length; qIdx++) {
+          if (!gameState.completedQuests?.includes(`${realm.id}_${qIdx}`)) {
+            onStartDungeon(realm.id, qIdx);
+            return;
+          }
+        }
+      }
+    }
+    // Si tout est terminé, lancer la première quête
+    onStartDungeon(realms[0].id, 0);
+  };
+
+  return (
+    <div className="max-w-6xl mx-auto px-4 py-5 space-y-6 sm:space-y-8 overflow-hidden pb-24">
+      {/* 2. Avatar Card Header & Chat CTA */}
+      <AvatarCard
+        userProfile={userProfile}
+        onOpenGrimoire={onOpenGrimoire}
+        onContinueQuest={handleContinueNextQuest}
+      />
+
+      {/* 3. Le bloc d'apprentissage : En-tête de section & Jauge Globale */}
+      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 pt-2">
+        <div>
+          <h2 className="text-xl sm:text-2xl font-black text-white tracking-tight flex items-center gap-2">
+            <span>Royaumes du Savoir</span>
+            <span className="text-xs font-bold px-2.5 py-0.5 rounded-full bg-slate-800 text-slate-300 border border-slate-700">
+              Parcours Brevet
+            </span>
           </h2>
-          <p className="text-slate-300 text-sm sm:text-base leading-relaxed">
-            Progresse étape par étape à travers les donjons socratiques pour forger tes réflexes et briller en Seconde et au Bac.
-          </p>
+          <p className="text-xs sm:text-sm text-slate-400">Progresse pilier par pilier pour forger tes réflexes d'examen.</p>
+        </div>
+
+        {/* Jauge globale compacte */}
+        <div className="flex items-center gap-3 bg-slate-900/90 px-4 py-2 rounded-xl border border-slate-800 self-start sm:self-auto">
+          <div className="text-right">
+            <span className="text-[11px] text-slate-400 block font-semibold">Progression Piliers</span>
+            <span className="text-sm font-black text-emerald-400 font-mono">{completedCount} / {realms.length} Terminés</span>
+          </div>
+          <div className="w-16 h-2 bg-slate-950 rounded-full overflow-hidden border border-slate-800">
+            <div
+              className="h-full bg-gradient-to-r from-emerald-500 to-teal-400 transition-all duration-500"
+              style={{ width: `${(completedCount / realms.length) * 100}%` }}
+            />
+          </div>
         </div>
       </div>
 
-      {/* Realms Grid */}
-      <div className="space-y-6 sm:space-y-8">
+      {/* Affichage structuré des 4 Piliers */}
+      <div className="space-y-6">
         {realms.map((realm) => {
           const isUnlocked = gameState.level >= realm.minLevel;
+          const realmCompletedQuests = realm.quests.filter((_, qIdx) =>
+            gameState.completedQuests?.includes(`${realm.id}_${qIdx}`)
+          ).length;
+
           return (
-            <div key={realm.id} className="space-y-3 sm:space-y-4">
-              <div className="flex items-center gap-3">
-                <span className={`w-3 h-3 rounded-full ${realm.badgeColor}`} />
-                <h3 className={`text-xl sm:text-2xl font-extrabold tracking-tight ${realm.color}`}>
-                  {realm.title}
-                </h3>
+            <div key={realm.id} className="space-y-3">
+              {/* Titre du Pilier avec statut compact */}
+              <div className="flex items-center justify-between">
+                <div className="flex items-center gap-2.5">
+                  <span className={`w-2.5 h-2.5 rounded-full ${realm.badgeColor}`} />
+                  <h3 className={`text-base sm:text-lg font-extrabold tracking-tight ${realm.color}`}>
+                    {realm.title}
+                  </h3>
+                </div>
+                <span className="text-xs font-mono font-bold text-slate-400">
+                  {realmCompletedQuests}/{realm.quests.length} Quêtes
+                </span>
               </div>
 
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+              <div className="grid grid-cols-1 md:grid-cols-3 gap-3.5">
                 {isUnlocked ? (
                   realm.quests.map((quest, qIdx) => {
                     const questKey = `${realm.id}_${qIdx}`;
@@ -113,60 +158,51 @@ export const AventureView: React.FC<AventureViewProps> = ({
                       <button
                         key={qIdx}
                         onClick={() => onStartDungeon(realm.id, qIdx)}
-                        className={`mq-glass mq-glass-interactive p-4 sm:p-6 rounded-2xl flex justify-between items-center text-left group gap-4 transition-all ${
+                        className={`mq-glass mq-glass-interactive p-4 rounded-xl flex flex-col justify-between text-left group gap-3 transition-all ${
                           isCompleted
-                            ? 'border border-emerald-500/40 bg-emerald-950/20 shadow-lg shadow-emerald-500/5'
+                            ? 'border border-emerald-500/40 bg-emerald-950/20 shadow-md shadow-emerald-500/5'
                             : 'border border-slate-800'
                         }`}
                       >
-                        <div className="flex items-center gap-4">
-                          <div className="relative shrink-0">
-                            <span className="text-3xl sm:text-4xl">{quest.icon}</span>
-                            {isCompleted && (
-                              <span className="absolute -bottom-1 -right-1 bg-emerald-500 text-slate-950 p-0.5 rounded-full shadow-md">
-                                <CheckCircle2 className="w-4 h-4 stroke-[3]" />
-                              </span>
-                            )}
-                          </div>
-                          <div>
-                            <div className="flex items-center gap-2 flex-wrap">
-                              <h4 className="font-extrabold text-base sm:text-lg text-white group-hover:text-amber-400 transition-colors leading-tight">
-                                {quest.title}
-                              </h4>
-                              {isCompleted && (
-                                <span className="inline-flex items-center gap-1 text-[11px] font-bold px-2 py-0.5 rounded-full bg-emerald-500/20 text-emerald-300 border border-emerald-500/40">
-                                  <CheckCircle2 className="w-3 h-3 text-emerald-400" /> Épreuve Réussie
-                                </span>
-                              )}
-                            </div>
-                            <p className="text-xs sm:text-sm text-slate-300 mt-1 leading-snug">{quest.sub}</p>
-                          </div>
-                        </div>
-
-                        <div className="flex items-center gap-1.5 text-xs sm:text-sm font-extrabold shrink-0">
+                        <div className="flex items-start justify-between gap-2">
+                          <span className="text-2xl sm:text-3xl p-1.5 bg-slate-900 rounded-lg border border-slate-800">{quest.icon}</span>
                           {isCompleted ? (
-                            <span className="text-emerald-400 flex items-center gap-1">
-                              Rejouer <ChevronRight className="w-4 h-4 sm:w-5 sm:h-5 group-hover:translate-x-1 transition-transform" />
+                            <span className="inline-flex items-center gap-1 text-[10px] font-bold px-2 py-0.5 rounded-full bg-emerald-500/20 text-emerald-300 border border-emerald-500/40 shrink-0">
+                              <CheckCircle2 className="w-3 h-3 text-emerald-400" /> Réussi
                             </span>
                           ) : (
-                            <span className="text-amber-400 flex items-center gap-1">
-                              Combattre <ChevronRight className="w-4 h-4 sm:w-5 sm:h-5 group-hover:translate-x-1 transition-transform" />
+                            <span className="text-[10px] font-bold px-2 py-0.5 rounded-full bg-amber-500/10 text-amber-300 border border-amber-500/30 shrink-0">
+                              En cours
                             </span>
                           )}
+                        </div>
+
+                        <div>
+                          <h4 className="font-extrabold text-sm sm:text-base text-white group-hover:text-amber-300 transition-colors leading-snug">
+                            {quest.title}
+                          </h4>
+                          <p className="text-xs text-slate-400 mt-1 line-clamp-2 leading-relaxed">{quest.sub}</p>
+                        </div>
+
+                        <div className="pt-2 border-t border-slate-900/80 flex items-center justify-between text-xs font-bold">
+                          <span className={isCompleted ? 'text-emerald-400' : 'text-amber-400'}>
+                            {isCompleted ? 'Rejouer' : 'Combattre'}
+                          </span>
+                          <ChevronRight className="w-4 h-4 text-slate-400 group-hover:translate-x-1 transition-transform" />
                         </div>
                       </button>
                     );
                   })
                 ) : (
-                  <div className="col-span-full mq-glass p-5 sm:p-6 rounded-2xl border border-dashed border-slate-800/80 flex items-center justify-between text-slate-500 opacity-60 gap-4">
-                    <div className="flex items-center gap-4">
-                      <Lock className="w-7 h-7 sm:w-8 sm:h-8 text-slate-600 shrink-0" />
+                  <div className="col-span-full mq-glass p-4 rounded-xl border border-dashed border-slate-800/80 flex items-center justify-between text-slate-500 opacity-60 gap-4">
+                    <div className="flex items-center gap-3">
+                      <Lock className="w-6 h-6 text-slate-600 shrink-0" />
                       <div>
-                        <h4 className="font-bold text-base sm:text-lg text-slate-400">{realm.title} (Verrouillé)</h4>
-                        <p className="text-xs sm:text-sm text-slate-500">Requis : Niveau {realm.minLevel} (Terminer le royaume précédent)</p>
+                        <h4 className="font-bold text-sm sm:text-base text-slate-400">{realm.title} (Verrouillé)</h4>
+                        <p className="text-xs text-slate-500">Niveau {realm.minLevel} requis</p>
                       </div>
                     </div>
-                    <span className="text-xs sm:text-sm font-bold px-3 py-1 bg-slate-900 rounded-lg border border-slate-800 shrink-0">Verrouillé</span>
+                    <span className="text-xs font-bold px-2.5 py-1 bg-slate-900 rounded-lg border border-slate-800 shrink-0">Verrouillé</span>
                   </div>
                 )}
               </div>
