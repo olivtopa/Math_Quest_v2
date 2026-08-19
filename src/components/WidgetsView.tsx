@@ -359,38 +359,75 @@ export const WidgetsView: React.FC = () => {
                   </div>
                 </div>
 
-                {/* Dynamic SVG Triangle (Cliquable pour agrandir) */}
-                <div
-                  onClick={() => setIsTrigoSvgZoomed(!isTrigoSvgZoomed)}
-                  className={`w-full ${isTrigoSvgZoomed ? 'h-96 sm:h-[420px]' : 'h-56 sm:h-64'} bg-slate-950 rounded-2xl border border-slate-800 p-4 flex items-center justify-center relative cursor-pointer group hover:border-emerald-500/50 transition-all shadow-inner`}
-                  title="Cliquer pour basculer la taille du triangle"
-                >
-                  <svg className="w-full h-full" viewBox="0 0 320 200">
-                    <polygon
-                      points={`40,160 ${40 + adjLength * 12},160 40,${160 - oppLength * 12}`}
-                      fill="rgba(16, 185, 129, 0.15)"
-                      stroke="#10b981"
-                      strokeWidth="2.5"
-                    />
-                    <rect x="40" y={160 - 15} width="15" height="15" fill="none" stroke="#f59e0b" strokeWidth="1.5" />
-                    <text x="25" y="168" fill="#fff" fontSize="12" fontWeight="bold">A</text>
-                    <text x={40 + adjLength * 12 + 6} y="168" fill="#fff" fontSize="12" fontWeight="bold">B ({trigoAngle}°)</text>
-                    <text x="25" y={160 - oppLength * 12} fill="#fff" fontSize="12" fontWeight="bold">C</text>
-                    <text x={40 + (adjLength * 12) / 2} y="180" fill="#cbd5e1" fontSize="11" textAnchor="middle">
-                      Adjacent = {adjLength.toFixed(1)} cm
-                    </text>
-                    <text x="20" y={160 - (oppLength * 12) / 2} fill="#cbd5e1" fontSize="11" textAnchor="middle" transform={`rotate(-90 20 ${160 - (oppLength * 12) / 2})`}>
-                      Opposé = {oppLength.toFixed(1)} cm
-                    </text>
-                    <text x={40 + (adjLength * 12) / 2 + 10} y={160 - (oppLength * 12) / 2 - 10} fill="#f59e0b" fontSize="12" fontWeight="bold">
-                      Hyp = {hypothenuseLength} cm
-                    </text>
-                  </svg>
+                {/* Dynamic SVG Triangle (Centré et mis à l'échelle pour remplir l'espace harmonieusement) */}
+                {(() => {
+                  // Calcul d'un facteur d'échelle dynamique pour centrer et remplir le SVG
+                  const maxDim = Math.max(adjLength, oppLength, 1);
+                  const scale = Math.min(220 / maxDim, 18);
+                  const triW = adjLength * scale;
+                  const triH = oppLength * scale;
+                  const startX = (320 - triW) / 2 + 15;
+                  const startY = (220 - triH) / 2 + triH + 5;
 
-                  <div className="absolute bottom-2 right-2 px-2.5 py-1 rounded-lg bg-slate-900/90 border border-slate-700 text-[11px] text-slate-300 font-bold opacity-80 group-hover:opacity-100 flex items-center gap-1 shadow-md">
-                    <span>{isTrigoSvgZoomed ? '🔍 Réduire' : '🔍 Agrandir'}</span>
-                  </div>
-                </div>
+                  return (
+                    <div
+                      onClick={() => setIsTrigoSvgZoomed(!isTrigoSvgZoomed)}
+                      className={`w-full ${isTrigoSvgZoomed ? 'h-80 sm:h-96' : 'h-56 sm:h-64'} bg-slate-950 rounded-2xl border border-slate-800 p-4 flex items-center justify-center relative cursor-pointer group hover:border-emerald-500/50 transition-all shadow-inner`}
+                      title="Cliquer pour basculer la taille du triangle"
+                    >
+                      <svg className="w-full h-full max-w-lg" viewBox="0 0 340 240">
+                        {/* Triangle rectangle */}
+                        <polygon
+                          points={`${startX},${startY} ${startX + triW},${startY} ${startX},${startY - triH}`}
+                          fill="rgba(16, 185, 129, 0.18)"
+                          stroke="#10b981"
+                          strokeWidth="2.5"
+                        />
+                        {/* Symbole angle droit */}
+                        <rect x={startX} y={startY - 16} width="16" height="16" fill="none" stroke="#f59e0b" strokeWidth="1.5" />
+                        
+                        {/* Sommets */}
+                        <text x={startX - 18} y={startY + 5} fill="#fff" fontSize="13" fontWeight="bold">A</text>
+                        <text x={startX + triW + 6} y={startY + 5} fill="#fff" fontSize="13" fontWeight="bold">B ({trigoAngle}°)</text>
+                        <text x={startX - 18} y={startY - triH + 2} fill="#fff" fontSize="13" fontWeight="bold">C</text>
+
+                        {/* Côté Adjacent (Bas) */}
+                        <text x={startX + triW / 2} y={startY + 22} fill="#cbd5e1" fontSize="12" fontWeight="bold" textAnchor="middle">
+                          Adjacent = {adjLength.toFixed(1)} cm
+                        </text>
+
+                        {/* Côté Opposé (Gauche) */}
+                        <text
+                          x={startX - 24}
+                          y={startY - triH / 2}
+                          fill="#cbd5e1"
+                          fontSize="12"
+                          fontWeight="bold"
+                          textAnchor="middle"
+                          transform={`rotate(-90 ${startX - 24} ${startY - triH / 2})`}
+                        >
+                          Opposé = {oppLength.toFixed(1)} cm
+                        </text>
+
+                        {/* Hypoténuse (Diagonale) */}
+                        <text
+                          x={startX + triW / 2 + 14}
+                          y={startY - triH / 2 - 10}
+                          fill="#f59e0b"
+                          fontSize="13"
+                          fontWeight="extrabold"
+                          textAnchor="middle"
+                        >
+                          Hyp = {hypothenuseLength} cm
+                        </text>
+                      </svg>
+
+                      <div className="absolute bottom-2 right-2 px-2.5 py-1 rounded-lg bg-slate-900/90 border border-slate-700 text-[11px] text-slate-300 font-bold opacity-80 group-hover:opacity-100 flex items-center gap-1 shadow-md">
+                        <span>{isTrigoSvgZoomed ? '🔍 Réduire' : '🔍 Agrandir'}</span>
+                      </div>
+                    </div>
+                  );
+                })()}
               </div>
             )}
 
