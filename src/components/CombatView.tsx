@@ -117,8 +117,13 @@ export const CombatView: React.FC<CombatViewProps> = ({
                 </button>
               </div>
 
-              <div className="w-full h-[55vh] sm:h-[65vh] bg-slate-950 rounded-xl border border-slate-800/90 p-4 flex items-center justify-center shadow-inner">
-                <svg ref={zoomedSvgRef} className="w-full h-full max-w-2xl" viewBox="0 0 300 240"></svg>
+              <div className="w-full h-[55vh] sm:h-[65vh] bg-slate-950 rounded-xl border border-slate-800/90 p-2 sm:p-4 flex items-center justify-center shadow-inner overflow-hidden">
+                <svg
+                  ref={zoomedSvgRef}
+                  className="w-full h-full max-h-full max-w-full"
+                  viewBox="0 0 300 240"
+                  preserveAspectRatio="xMidYMid meet"
+                ></svg>
               </div>
 
               <p className="text-xs text-slate-400 text-center">Clique n'importe où en dehors ou sur « Fermer » pour revenir au combat.</p>

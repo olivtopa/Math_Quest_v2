@@ -138,7 +138,7 @@ export function generateDynamicQuestion(realm: string, questIndex: number): Dyna
         ];
         q.svgOverlay = (svg) => {
           svg.innerHTML = `
-            <text x="150" y="30" fill="#8b5cf6" font-size="15" font-weight="bold" text-anchor="middle">Forme $a \\times 10^n$ avec $1 \\le a < 10$</text>
+            <text x="150" y="30" fill="#8b5cf6" font-size="15" font-weight="bold" text-anchor="middle">Forme a × 10ⁿ (avec 1 ≤ a < 10)</text>
             <rect x="35" y="65" width="230" height="55" rx="10" fill="#1e293b" stroke="#8b5cf6" stroke-width="2"/>
             <text x="150" y="100" fill="#fff" font-size="18" font-weight="bold" text-anchor="middle">${fullVal.toLocaleString('fr-FR')}</text>
             <text x="150" y="160" fill="#f59e0b" font-size="18" font-weight="extrabold" text-anchor="middle">↳ a × 10ⁿ = ?</text>
