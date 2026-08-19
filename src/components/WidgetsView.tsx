@@ -4,8 +4,6 @@ import { MathRenderer } from './MathRenderer';
 
 export const WidgetsView: React.FC = () => {
   const [activeWidget, setActiveWidget] = useState<'functions' | 'trigonometry' | 'scratch' | 'pythagore' | null>(null);
-  const [isWidgetSvgZoomed, setIsWidgetSvgZoomed] = useState<boolean>(false);
-  const [isTrigoSvgZoomed, setIsTrigoSvgZoomed] = useState<boolean>(false);
 
   // Widget 1: Fonctions Affines & Linéaires (y = ax + b)
   const [sliderA, setSliderA] = useState<number>(2);
@@ -239,11 +237,7 @@ export const WidgetsView: React.FC = () => {
 
                 {/* Plot SVG & Calcul d'image */}
                 <div className="grid grid-cols-1 md:grid-cols-3 gap-4 items-center">
-                  <div
-                    onClick={() => setIsWidgetSvgZoomed(!isWidgetSvgZoomed)}
-                    className="md:col-span-2 h-64 bg-slate-950 rounded-2xl border border-slate-800 p-2 relative flex items-center justify-center cursor-pointer group hover:border-amber-500/50 transition-all"
-                    title="Cliquer pour basculer la vue agrandie"
-                  >
+                  <div className="md:col-span-2 h-64 bg-slate-950 rounded-2xl border border-slate-800 p-2 relative flex items-center justify-center">
                     <svg className="w-full h-full" viewBox="0 0 300 240">
                       {/* Repère cartésien */}
                       <line x1="20" y1="120" x2="280" y2="120" stroke="#475569" strokeWidth="1.5" />
@@ -269,10 +263,6 @@ export const WidgetsView: React.FC = () => {
                         (0, {sliderB})
                       </text>
                     </svg>
-
-                    <div className="absolute bottom-2 right-2 px-2 py-0.5 rounded bg-slate-900/90 border border-slate-700 text-[10px] text-slate-300 font-bold opacity-75 group-hover:opacity-100 flex items-center gap-1">
-                      <span>🔍 Agrandir</span>
-                    </div>
                   </div>
 
                   <div className="p-4 bg-slate-900/90 rounded-2xl border border-slate-800 space-y-3 text-left">
@@ -359,7 +349,7 @@ export const WidgetsView: React.FC = () => {
                   </div>
                 </div>
 
-                {/* Dynamic SVG Triangle (Centré et mis à l'échelle pour remplir l'espace harmonieusement) */}
+                {/* Dynamic SVG Triangle (Centré et harmonieux de façon permanente) */}
                 {(() => {
                   // Calcul d'un facteur d'échelle dynamique pour centrer et remplir le SVG
                   const maxDim = Math.max(adjLength, oppLength, 1);
@@ -370,12 +360,8 @@ export const WidgetsView: React.FC = () => {
                   const startY = (220 - triH) / 2 + triH + 5;
 
                   return (
-                    <div
-                      onClick={() => setIsTrigoSvgZoomed(!isTrigoSvgZoomed)}
-                      className={`w-full ${isTrigoSvgZoomed ? 'h-80 sm:h-96' : 'h-56 sm:h-64'} bg-slate-950 rounded-2xl border border-slate-800 p-4 flex items-center justify-center relative cursor-pointer group hover:border-emerald-500/50 transition-all shadow-inner`}
-                      title="Cliquer pour basculer la taille du triangle"
-                    >
-                      <svg className="w-full h-full max-w-lg" viewBox="0 0 340 240">
+                    <div className="w-full h-60 sm:h-64 bg-slate-950 rounded-2xl border border-slate-800 p-3 flex items-center justify-center relative shadow-inner">
+                      <svg className="w-full h-full max-w-md" viewBox="0 0 340 240">
                         {/* Triangle rectangle */}
                         <polygon
                           points={`${startX},${startY} ${startX + triW},${startY} ${startX},${startY - triH}`}
@@ -421,10 +407,6 @@ export const WidgetsView: React.FC = () => {
                           Hyp = {hypothenuseLength} cm
                         </text>
                       </svg>
-
-                      <div className="absolute bottom-2 right-2 px-2.5 py-1 rounded-lg bg-slate-900/90 border border-slate-700 text-[11px] text-slate-300 font-bold opacity-80 group-hover:opacity-100 flex items-center gap-1 shadow-md">
-                        <span>{isTrigoSvgZoomed ? '🔍 Réduire' : '🔍 Agrandir'}</span>
-                      </div>
                     </div>
                   );
                 })()}

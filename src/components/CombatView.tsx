@@ -29,18 +29,13 @@ export const CombatView: React.FC<CombatViewProps> = ({
   feedbackState
 }) => {
   const [activeHintLevel, setActiveHintLevel] = useState<number>(0);
-  const [isSvgZoomed, setIsSvgZoomed] = useState<boolean>(false);
   const svgRef = useRef<SVGSVGElement>(null);
-  const zoomedSvgRef = useRef<SVGSVGElement>(null);
 
   useEffect(() => {
     if (svgRef.current && question.svgOverlay) {
       question.svgOverlay(svgRef.current);
     }
-    if (zoomedSvgRef.current && question.svgOverlay) {
-      question.svgOverlay(zoomedSvgRef.current);
-    }
-  }, [question, isSvgZoomed]);
+  }, [question]);
 
   const handleNextHint = () => {
     if (question.hints && activeHintLevel < question.hints.length) {
@@ -74,60 +69,10 @@ export const CombatView: React.FC<CombatViewProps> = ({
           </h2>
         </div>
 
-        {/* SVG Diagram / Visual Overlay Container (Cliquable avec indicateur de zoom) */}
+        {/* SVG Diagram / Visual Overlay Container (Stable, Net & Centré) */}
         {question.svgOverlay && (
-          <div className="space-y-1.5">
-            <div
-              onClick={() => setIsSvgZoomed(true)}
-              className="w-full max-w-md mx-auto h-64 bg-slate-950 rounded-2xl border border-slate-800 flex items-center justify-center p-4 relative shadow-inner group cursor-pointer hover:border-amber-500/50 hover:shadow-amber-500/10 transition-all"
-              title="Cliquer pour agrandir le schéma"
-            >
-              <svg ref={svgRef} className="w-full h-full" viewBox="0 0 300 240"></svg>
-              
-              {/* Badge d'indication de zoom */}
-              <div className="absolute bottom-3 right-3 px-2.5 py-1 rounded-lg bg-slate-900/90 border border-slate-700 text-slate-300 text-[11px] font-bold flex items-center gap-1.5 opacity-80 group-hover:opacity-100 group-hover:bg-amber-500/20 group-hover:text-amber-300 group-hover:border-amber-500/40 transition-all backdrop-blur-sm shadow-md">
-                <Sparkles className="w-3.5 h-3.5 text-amber-400" />
-                <span>🔍 Cliquer pour agrandir</span>
-              </div>
-            </div>
-            <p className="text-center text-[11px] text-slate-500 font-medium">Astuce : clique sur le schéma pour l'afficher en grand écran.</p>
-          </div>
-        )}
-
-        {/* Modale plein écran (Lightbox Zoom) */}
-        {isSvgZoomed && question.svgOverlay && (
-          <div
-            onClick={() => setIsSvgZoomed(false)}
-            className="fixed inset-0 z-[120] bg-slate-950/95 backdrop-blur-md flex items-center justify-center p-4 sm:p-8 animate-fadeIn cursor-zoom-out"
-          >
-            <div
-              onClick={(e) => e.stopPropagation()}
-              className="mq-glass p-6 sm:p-8 max-w-3xl w-full max-h-[90vh] flex flex-col items-center justify-between gap-4 border-amber-500/50 shadow-2xl rounded-2xl relative cursor-default"
-            >
-              <div className="w-full flex items-center justify-between border-b border-slate-800 pb-3">
-                <div className="flex items-center gap-2">
-                  <span className="text-amber-400 text-lg">🔍</span>
-                  <h3 className="text-base sm:text-lg font-black text-white">{question.title} — Vue Agrandie</h3>
-                </div>
-                <button
-                  onClick={() => setIsSvgZoomed(false)}
-                  className="px-3 py-1.5 rounded-full bg-slate-900 border border-slate-800 text-slate-300 hover:text-white font-bold text-xs sm:text-sm transition-colors"
-                >
-                  ✕ Fermer (Échap)
-                </button>
-              </div>
-
-              <div className="w-full max-w-xl aspect-[5/4] max-h-[50vh] sm:max-h-[60vh] mx-auto bg-slate-950 rounded-2xl border border-slate-800/90 p-3 sm:p-5 flex items-center justify-center shadow-inner overflow-hidden">
-                <svg
-                  ref={zoomedSvgRef}
-                  className="w-full h-full"
-                  viewBox="0 0 300 240"
-                  preserveAspectRatio="xMidYMid meet"
-                ></svg>
-              </div>
-
-              <p className="text-xs text-slate-400 text-center">Clique n'importe où en dehors ou sur « Fermer » pour revenir au combat.</p>
-            </div>
+          <div className="w-full max-w-md mx-auto h-60 sm:h-64 bg-slate-950 rounded-2xl border border-slate-800 flex items-center justify-center p-3 relative shadow-inner">
+            <svg ref={svgRef} className="w-full h-full" viewBox="0 0 300 240"></svg>
           </div>
         )}
 
